@@ -234,15 +234,6 @@ def SIR_Cases_vs_Prediction_Short_Term_Plot(region,i):
     plt.show()    
 
 
-def model_plots(region):
-    i = len(model_parameters.loc[region,'date'])
-        
-    SIR_Prediction_Plot_0(region)
-    
-    for x in range(1,i+1):
-        SIR_Prediction_Plot_i(region, x)
-    
-    SIR_Cases_vs_Prediction_Short_Term_Plot(region,i)
 
 def plots_early_lockdown(region):
     N, P, f = Population_parameters(region)
@@ -277,3 +268,85 @@ def prediction_output(region):
     i = len(model_parameters.loc[region,'date'])
     Predicted = SIR_Prediction_i(region,i)
     return(Predicted)
+
+
+def plot_total_cases(region):
+    Region_Cases = Cases[(Cases['Region']==region)]
+    Region_Cases['Confirmed'] = Region_Cases['Confirmed'].fillna(0).astype(float)
+    Region_Cases['Deaths'] = Region_Cases['Deaths'].fillna(0).astype(float)
+    fig = plt.figure(facecolor='w',figsize=(10,4))
+    ax = fig.add_subplot(111, axisbelow=True)
+    ax.plot(Region_Cases['Date'], Region_Cases['Confirmed'], 'y', alpha=0.5, lw=2, ls = '-' , label='Cases')
+    ax.plot(Region_Cases['Date'], Region_Cases['Deaths'], 'r', alpha=0.5, lw=2, ls = '-' , label='Deaths')
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Total Reported Cases')
+    #ax.axvline(today, 0, 1, color='k', alpha=0.5, lw=2, ls = ':', label='today')
+    ax.yaxis.set_tick_params(length=0)
+    ax.xaxis.set_minor_locator(days)
+    ax.set_title(label='Total Reported Cases : '+region)#+  : '+model_parameters.loc[region,'labels'][i])
+    ax.grid(b=True, which='major', c='w', lw=2, ls='-')
+    legend = ax.legend(loc='center right')
+    legend.get_frame().set_alpha(0.5)
+#    for spine in ('top', 'right', 'bottom', 'left'):
+#        ax.spines[spine].set_visible(False)
+    plt.show()
+
+def plot_daily_cases(region):
+    Region_Cases = Cases[(Cases['Region']==region)]
+    Region_Cases['Confirmed'] = Region_Cases['Confirmed'].fillna(0).astype(float)
+    Region_Cases['Cases1'] = Region_Cases.groupby('Region')['Confirmed'].shift(1).fillna(0)
+    Region_Cases['Daily_Cases']=Region_Cases['Confirmed']-Region_Cases['Cases1']
+    fig = plt.figure(facecolor='w',figsize=(10,4))
+    ax = fig.add_subplot(111, axisbelow=True)
+    ax.plot(Region_Cases['Date'], Region_Cases['Daily_Cases'], 'y', alpha=0.5, lw=2, ls = '-' , label='Daily New Cases')
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Daily New Numbers')
+    #ax.axvline(today, 0, 1, color='k', alpha=0.5, lw=2, ls = ':', label='today')
+    ax.yaxis.set_tick_params(length=0)
+    ax.xaxis.set_minor_locator(days)
+    ax.set_title(label='Daily New Deaths and Cases : '+region)#+  : '+model_parameters.loc[region,'labels'][i])
+    ax.grid(b=True, which='major', c='w', lw=2, ls='-')
+    legend = ax.legend(loc='center right')
+    legend.get_frame().set_alpha(0.5)
+#    for spine in ('top', 'right', 'bottom', 'left'):
+#        ax.spines[spine].set_visible(False)
+    plt.show()
+
+def plot_daily_deaths(region):
+    Region_Cases = Cases[(Cases['Region']==region)]
+    Region_Cases['Deaths'] = Region_Cases['Deaths'].fillna(0).astype(float)
+    Region_Cases['Deaths1'] = Region_Cases.groupby('Region')['Deaths'].shift(1).fillna(0)
+    Region_Cases['Daily_Deaths']=Region_Cases['Deaths']-Region_Cases['Deaths1']
+    fig = plt.figure(facecolor='w',figsize=(10,4))
+    ax = fig.add_subplot(111, axisbelow=True)
+    ax.plot(Region_Cases['Date'], Region_Cases['Daily_Deaths'], 'r', label='Daily New Deaths')
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Daily New Numbers')
+    #ax.axvline(today, 0, 1, color='k', alpha=0.5, lw=2, ls = ':', label='today')
+    ax.yaxis.set_tick_params(length=0)
+    ax.xaxis.set_minor_locator(days)
+    ax.set_title(label='Daily New Deaths and Cases : '+region)#+  : '+model_parameters.loc[region,'labels'][i])
+    ax.grid(b=True, which='major', c='w', lw=2, ls='-')
+    legend = ax.legend(loc='center right')
+    legend.get_frame().set_alpha(0.5)
+#    for spine in ('top', 'right', 'bottom', 'left'):
+#        ax.spines[spine].set_visible(False)
+    plt.show()
+
+
+def summary_plots(region):
+    plot_total_cases(region)
+    plot_daily_cases(region)
+    plot_daily_deaths(region)
+    
+def model_plots(region):
+    summary_plots(region)
+    i = len(model_parameters.loc[region,'date'])
+        
+    SIR_Prediction_Plot_0(region)
+    
+    for x in range(1,i+1):
+        SIR_Prediction_Plot_i(region, x)
+    
+    SIR_Cases_vs_Prediction_Short_Term_Plot(region,i)
+

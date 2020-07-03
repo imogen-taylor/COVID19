@@ -30,29 +30,29 @@ download cases csv and deaths csv
 Read and Prepare Data from PHE for UK regional level case and death data
 
 """
-url_c_region = "https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv"
-s_c_region=requests.get(url_c_region).content
-Cases_Region=pd.read_csv(io.StringIO(s_c_region.decode('utf-8')))
-Cases_Region.to_csv('confirmed_regional.csv')
-Cases_Region['Region']=Cases_Region['Area name']
-Cases_Region['Date'] = Cases_Region['Specimen date']
-Cases_Region['Cases'] = Cases_Region['Cumulative lab-confirmed cases']
-Cases_Region = Cases_Region[['Region','Date','Cases']]
-Cases_Region['Date'] = pd.to_datetime(Cases_Region['Date'])
-
-# Deaths_Region_raw = pd.read_csv('data/UK-Death-Tracker - CSV.csv')
-url_d_region = "https://data.humdata.org/hxlproxy/api/data-preview.csv?url=https%3A%2F%2Fraw.githubusercontent.com%2FCSSEGISandData%2FCOVID-19%2Fmaster%2Fcsse_covid_19_data%2Fcsse_covid_19_time_series%2Ftime_series_covid19_deaths_global.csv&filename=time_series_covid19_deaths_global.csv"
-s_d_region=requests.get(url_d_region).content
-Deaths_Region=pd.read_csv(io.StringIO(s_d_region.decode('utf-8')))
-Deaths_Region.to_csv('deaths_regional.csv')
-Deaths_Region = pd.read_csv("coronavirus-deaths.csv")
-Deaths_Region['Region']=Deaths_Region['Area name']
-Deaths_Region['Date'] = Deaths_Region['Reporting date']
-Deaths_Region['Deaths'] = Deaths_Region['Cumulative hospital deaths']
-Deaths_Region = Deaths_Region[['Region','Date','Deaths']]
-Deaths_Region['Date'] = pd.to_datetime(Deaths_Region['Date'])
-
-Cases_Region = pd.merge(Cases_Region, Deaths_Region,how='left' ,on=['Region','Date'])
+#url_c_region = "https://coronavirus.data.gov.uk/downloads/csv/coronavirus-cases_latest.csv"
+#s_c_region=requests.get(url_c_region).content
+#Cases_Region=pd.read_csv(io.StringIO(s_c_region.decode('utf-8')))
+#Cases_Region.to_csv('confirmed_regional.csv')
+#Cases_Region['Region']=Cases_Region['Area name']
+#Cases_Region['Date'] = Cases_Region['Specimen date']
+#Cases_Region['Cases'] = Cases_Region['Cumulative lab-confirmed cases']
+#Cases_Region = Cases_Region[['Region','Date','Cases']]
+#Cases_Region['Date'] = pd.to_datetime(Cases_Region['Date'])
+#
+#
+#url_d_region = "https://data.humdata.org/hxlproxy/api/data-preview.csv?url=https%3A%2F%2Fraw.githubusercontent.com%2FCSSEGISandData%2FCOVID-19%2Fmaster%2Fcsse_covid_19_data%2Fcsse_covid_19_time_series%2Ftime_series_covid19_deaths_global.csv&filename=time_series_covid19_deaths_global.csv"
+#s_d_region=requests.get(url_d_region).content
+#Deaths_Region=pd.read_csv(io.StringIO(s_d_region.decode('utf-8')))
+#Deaths_Region.to_csv('deaths_regional.csv')
+##Deaths_Region = pd.read_csv("coronavirus-deaths.csv")
+#Deaths_Region['Region']=Deaths_Region['Country/Region']
+#Deaths_Region['Date'] = Deaths_Region['Reporting date']
+#Deaths_Region['Deaths'] = Deaths_Region['Cumulative hospital deaths']
+#Deaths_Region = Deaths_Region[['Region','Date','Deaths']]
+#Deaths_Region['Date'] = pd.to_datetime(Deaths_Region['Date'])
+#
+#Cases_Region = pd.merge(Cases_Region, Deaths_Region,how='left' ,on=['Region','Date'])
 
 
 """
@@ -158,3 +158,4 @@ Cases["Country"] = Cases["Region"].replace(
 
 end_date = pd.to_datetime("2020-12-01").date()
 
+Cases.to_csv("Cases.csv")

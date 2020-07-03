@@ -3,7 +3,7 @@ Refresh the SIR Regional forecasts
 """
 
 import os
-os.chdir('C:/Users/ITaylor/Desktop/Git/covid-absences/SIR')
+os.chdir('C:/Users/imoge/OneDrive/Documents/GitHub/COVID19/SIR')
 
 #set up
 exec(open("SIR-set-up.py").read())
@@ -20,17 +20,3 @@ exec(open("SIR-graphs.py").read())
 
 model_plots('United Kingdom')  
 
-model_plots('France')
-
-model_plots('Italy')
-
-
-
-plots_early_lockdown('United Kingdom')
-
-# ### Other analysis
-# exec(open("SIR-other-analysis.py").read())
-# pct = calculate_population_infected('United Kingdom')
-# deaths, deaths_upper, deaths_lower = partner_deaths('United Kingdom')
-
-region = 'Italy'
